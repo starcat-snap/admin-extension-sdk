@@ -1,1 +1,1 @@
-# admin-extension-sdk
+# Admin Extension SDK
