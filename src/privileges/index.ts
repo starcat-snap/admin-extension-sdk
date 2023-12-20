@@ -5,7 +5,7 @@ import type { privileges } from './privilege-resolver';
  * Determines which privileges are needed for a certain message type.
  * @internal
  */
-export const ShopwareMessageTypePrivileges: Record<string, privileges> = {
+export const SnapAdminMessageTypePrivileges: Record<string, privileges> = {
   notificationDispatch: {},
   windowRedirect: {},
   windowReload: {},
@@ -13,7 +13,7 @@ export const ShopwareMessageTypePrivileges: Record<string, privileges> = {
   contextEnvironment: {},
   contextLocale: {},
   contextCurrency: {},
-  contextShopwareVersion: {},
+  contextSnapAdminVersion: {},
   contextAppInformation: {},
   getPageTitle: {},
   uiComponentSectionRenderer: {},

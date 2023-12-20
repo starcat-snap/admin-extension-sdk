@@ -359,7 +359,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery.
    * These queries are used to search for documents and score them with a ranking
    */
   addQuery(filter: SingleFilter, score: number, scoreField: string|null = null): this {
@@ -520,7 +520,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\AvgAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\AvgAggregation
    * Allows to calculate the avg value for the provided field
    */
   static avg(name: string, field: string): Aggregations['avg'] {
@@ -528,7 +528,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\CountAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\CountAggregation
    * Allows to calculate the count value for the provided field
    */
   static count(name: string, field: string): Aggregations['count'] {
@@ -536,7 +536,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation
    * Allows to calculate the max value for the provided field
    */
   static max(name: string, field: string): Aggregations['max'] {
@@ -544,7 +544,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MinAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MinAggregation
    * Allows to calculate the min value for the provided field
    */
   static min(name: string, field: string): Aggregations['min'] {
@@ -552,7 +552,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\StatsAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\StatsAggregation
    * Allows to calculate the sum, max, min, avg, count values for the provided field
    */
   static stats(name: string, field: string): Aggregations['stats'] {
@@ -560,7 +560,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\SumAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\SumAggregation
    * Allows to calculate the sum value for the provided field
    */
   static sum(name: string, field: string): Aggregations['sum'] {
@@ -568,7 +568,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation
    * Allows to fetch term buckets for the provided field
    */
   static terms(
@@ -582,7 +582,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation
    * Allows to filter an aggregation result
    */
   static filter(name: string, filter: SingleFilter[], aggregation: Aggregation[]): Filter {
@@ -590,7 +590,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\DateHistogramAggregation
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\DateHistogramAggregation
    * Allows to fetch date buckets for the provided date interval
    */
   static histogram(
@@ -605,7 +605,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting.
    * Allows to sort the documents by the provided field
    */
   static sort(field: string, order:Sorting['order'] = 'ASC', naturalSorting = false): Sorting {
@@ -613,7 +613,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting.
    * Allows to sort the documents by the provided field naturally
    */
   static naturalSorting(field: string, order:Sorting['order'] = 'ASC'): Sorting {
@@ -621,7 +621,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting.
    * Allows to sort the documents by counting associations via the provided field
    *
    * Sql representation: `ORDER BY COUNT({field}) {order}`
@@ -631,7 +631,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter.
    * This allows to filter documents where the value are contained in the provided field.
    *
    * Sql representation: `{field} LIKE %{value}%`
@@ -641,7 +641,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter.
    * This allows to filter documents where the value marks the beginning of the provided field.
    *
    * Sql representation: `{field} LIKE {value}%`
@@ -651,7 +651,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter.
    * This allows to filter documents where the value marks the end of the provided field.
    *
    * Sql representation: `{field} LIKE %{value}`
@@ -661,7 +661,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter.
    * This allows to filter documents where the field matches one of the provided values
    *
    * Sql representation: `{field} IN ({value}, {value})`
@@ -671,7 +671,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter.
    * This allows to filter documents where the field matches a defined range
    *
    * Sql representation: `{field} >= {value}`, `{field} <= {value}`, ...
@@ -681,7 +681,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter.
    * This allows to filter documents where the field matches a defined range
    *
    * Sql representation: `{field} = {value}`
@@ -691,7 +691,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter.
    * This allows to filter documents which not matches for the provided filters
    * All above listed queries can be provided (equals, equalsAny, range, contains)
    *
@@ -707,7 +707,7 @@ export default class Criteria {
   }
 
   /**
-   * @see \Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter.
+   * @see \SnapAdmin\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter.
    * This allows to filter documents which matches for the provided filters
    * All above listed queries can be provided (equals, equalsAny, range, contains)
    *

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { privilegeString } from '../../privileges/privilege-resolver';
 import type { privileges } from '../../privileges/privilege-resolver';
-import type { ShopwareMessageTypes } from '../../messages.types';
+import type { SnapAdminMessageTypes } from '../../messages.types';
 import { findExtensionByBaseUrl } from '../../privileges/privilege-resolver';
 import { traverseObject } from '../utils';
 import MissingPrivilegesError from '../../privileges/missing-privileges-error';
@@ -16,7 +16,7 @@ export default function validate({
 }: {
   serializedData: any,
   origin: string,
-  type: keyof ShopwareMessageTypes,
+  type: keyof SnapAdminMessageTypes,
   privilegesToCheck: (keyof privileges)[],
 }): Error|null {
   if (origin === undefined) {

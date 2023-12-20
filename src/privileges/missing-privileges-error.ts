@@ -1,4 +1,4 @@
-import type { ShopwareMessageTypes } from '../messages.types';
+import type { SnapAdminMessageTypes } from '../messages.types';
 import type { privilegeString } from './privilege-resolver';
 
 type type = '__MissingPrivilegesError__';
@@ -12,9 +12,9 @@ interface MissingPrivilegeErrorJson {
 export default class MissingPrivilegesError extends Error {
   missingPrivileges: Array<privilegeString>;
 
-  messageType: keyof ShopwareMessageTypes;
+  messageType: keyof SnapAdminMessageTypes;
 
-  constructor(messageType: keyof ShopwareMessageTypes, missingPrivileges: Array<privilegeString>) {
+  constructor(messageType: keyof SnapAdminMessageTypes, missingPrivileges: Array<privilegeString>) {
     super(`Your app is missing the privileges ${missingPrivileges.join(', ')} for action "${messageType}".`);
 
     this.missingPrivileges = missingPrivileges;

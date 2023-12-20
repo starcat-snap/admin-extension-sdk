@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import type { ShopwareMessageTypes } from './messages.types';
+import type { SnapAdminMessageTypes } from './messages.types';
 import { generateUniqueId } from './_internals/utils';
 import type { extension } from './privileges/privilege-resolver';
 import { sendPrivileged, handlePrivileged } from './privileges/privilege-resolver';
-import { ShopwareMessageTypePrivileges } from './privileges';
+import { SnapAdminMessageTypePrivileges } from './privileges';
 import MissingPrivilegesError from './privileges/missing-privileges-error';
 import SerializerFactory from './_internals/serializer';
 import createError from './_internals/error-handling/error-factory';
@@ -47,13 +47,13 @@ export function setExtensions(extensions: extensions): void {
  * This type contains the data of the type without the responseType
  * @internal
  */
-export type MessageDataType<TYPE extends keyof ShopwareMessageTypes> = Omit<ShopwareMessageTypes[TYPE], 'responseType'>;
+export type MessageDataType<TYPE extends keyof SnapAdminMessageTypes> = Omit<SnapAdminMessageTypes[TYPE], 'responseType'>;
 
 /**
  * This is the structure of the data which will be send with {@link send}
  * @internal
  */
-export type ShopwareMessageSendData<MESSAGE_TYPE extends keyof ShopwareMessageTypes> = {
+export type SnapAdminMessageSendData<MESSAGE_TYPE extends keyof SnapAdminMessageTypes> = {
   _type: MESSAGE_TYPE,
   _data: MessageDataType<MESSAGE_TYPE>,
   _callbackId: string,
@@ -63,9 +63,9 @@ export type ShopwareMessageSendData<MESSAGE_TYPE extends keyof ShopwareMessageTy
  * This is the structure of the data which will be send back when the admin gives a response
  * @internal
  */
-export type ShopwareMessageResponseData<MESSAGE_TYPE extends keyof ShopwareMessageTypes> = {
+export type SnapAdminMessageResponseData<MESSAGE_TYPE extends keyof SnapAdminMessageTypes> = {
   _type: MESSAGE_TYPE,
-  _response: ShopwareMessageTypes[MESSAGE_TYPE]['responseType'] | null,
+  _response: SnapAdminMessageTypes[MESSAGE_TYPE]['responseType'] | null,
   _callbackId: string,
 }
 
@@ -100,12 +100,12 @@ const subscriberRegistry: Set<{
  * @param data The matching data for the type
  * @returns A promise with the response data in the given responseType
  */
-export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
+export function send<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(
   type: MESSAGE_TYPE,
   data: MessageDataType<MESSAGE_TYPE>,
   _targetWindow?: Window,
   _origin?: string
-): Promise<ShopwareMessageTypes[MESSAGE_TYPE]['responseType'] | null> {
+): Promise<SnapAdminMessageTypes[MESSAGE_TYPE]['responseType'] | null> {
   const missingPriviliges = sendPrivileged(type);
   if (missingPriviliges !== null) {
     const missingPrivilegesError = new MissingPrivilegesError(type, missingPriviliges);
@@ -120,13 +120,13 @@ export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
   const sendData = data ?? {};
 
   // Generate the message with the callbackId
-  const messageData: ShopwareMessageSendData<MESSAGE_TYPE> = {
+  const messageData: SnapAdminMessageSendData<MESSAGE_TYPE> = {
     _type: type,
     _data: sendData,
     _callbackId: callbackId,
   };
 
-  let serializedData = serialize(messageData) as ShopwareMessageSendData<MESSAGE_TYPE>;
+  let serializedData = serialize(messageData) as SnapAdminMessageSendData<MESSAGE_TYPE>;
 
   // Validate if send value contains entity data where the app has no privileges for
   if (_origin) {
@@ -154,7 +154,7 @@ export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
             id: serializedData._data.id,
             data: validationErrors,
           },
-        }) as ShopwareMessageSendData<MESSAGE_TYPE>;
+        }) as SnapAdminMessageSendData<MESSAGE_TYPE>;
       }
       // Everything else can overwrite the response
       else {
@@ -162,7 +162,7 @@ export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
           _type: serializedData._type,
           _callbackId: serializedData._callbackId,
           _data: validationErrors,
-        }) as ShopwareMessageSendData<MESSAGE_TYPE>;
+        }) as SnapAdminMessageSendData<MESSAGE_TYPE>;
       }
 
     }
@@ -206,7 +206,7 @@ export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
       }
 
       // Deserialize methods etc. so that they are callable in JS
-      const deserializedResponseData = deserialize(snapResponseData, event) as ShopwareMessageResponseData<MESSAGE_TYPE>;
+      const deserializedResponseData = deserialize(snapResponseData, event) as SnapAdminMessageResponseData<MESSAGE_TYPE>;
 
       // Remove event so that in only execute once
       window.removeEventListener('message', callbackHandler);
@@ -266,16 +266,16 @@ export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
  * @param method This method should return the response value
  * @returns The return value is a cancel function to stop listening to the events
  */
-export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
+export function handle<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>
 (
   type: MESSAGE_TYPE,
-  method: (data: MessageDataType<MESSAGE_TYPE>, additionalInformation: { _event_: MessageEvent<string>}) => Promise<ShopwareMessageTypes[MESSAGE_TYPE]['responseType']> | ShopwareMessageTypes[MESSAGE_TYPE]['responseType']
+  method: (data: MessageDataType<MESSAGE_TYPE>, additionalInformation: { _event_: MessageEvent<string>}) => Promise<SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']> | SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']
 )
   : () => void
 {
   const handleListener = async function(event: MessageEvent<string>): Promise<void> {
     // Message type needs privileges to be handled
-    if (ShopwareMessageTypePrivileges[type] && Object.keys(ShopwareMessageTypePrivileges[type]).length) {
+    if (SnapAdminMessageTypePrivileges[type] && Object.keys(SnapAdminMessageTypePrivileges[type]).length) {
       if (!adminExtensions) {
         return;
       }
@@ -311,7 +311,7 @@ export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
     }
 
     // Deserialize methods etc. so that they are callable in JS
-    const deserializedMessageData = deserialize(snapMessageData, event) as ShopwareMessageSendData<MESSAGE_TYPE>;
+    const deserializedMessageData = deserialize(snapMessageData, event) as SnapAdminMessageSendData<MESSAGE_TYPE>;
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const responseValue = await Promise.resolve((() => {
@@ -353,15 +353,15 @@ export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
       );
     })()).catch(e => createError(type, e));
 
-    const responseMessage: ShopwareMessageResponseData<MESSAGE_TYPE> = {
+    const responseMessage: SnapAdminMessageResponseData<MESSAGE_TYPE> = {
       _callbackId: deserializedMessageData._callbackId,
       _type: deserializedMessageData._type,
       _response: responseValue ?? null,
     };
 
     // Replace methods etc. so that they are working in JSON format
-    const serializedResponseMessage = ((): ShopwareMessageResponseData<MESSAGE_TYPE> => {
-      let serializedMessage = serialize(responseMessage) as ShopwareMessageResponseData<MESSAGE_TYPE>;
+    const serializedResponseMessage = ((): SnapAdminMessageResponseData<MESSAGE_TYPE> => {
+      let serializedMessage = serialize(responseMessage) as SnapAdminMessageResponseData<MESSAGE_TYPE>;
       const messageValidationTypes = [
         'datasetSubscribe',
         'datasetGet',
@@ -384,7 +384,7 @@ export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
       if (validationErrors) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         serializedMessage._response = validationErrors;
-        serializedMessage = serialize(serializedMessage) as ShopwareMessageResponseData<MESSAGE_TYPE>;
+        serializedMessage = serialize(serializedMessage) as SnapAdminMessageResponseData<MESSAGE_TYPE>;
       }
 
       return serializedMessage;
@@ -411,9 +411,9 @@ export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
   return ():void => window.removeEventListener('message', handleListener);
 }
 
-export function publish<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
+export function publish<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(
   type: MESSAGE_TYPE,
-  data: ShopwareMessageTypes[MESSAGE_TYPE]['responseType'],
+  data: SnapAdminMessageTypes[MESSAGE_TYPE]['responseType'],
   sources: {
     source: Window,
     origin: string,
@@ -433,9 +433,9 @@ export function publish<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
   });
 }
 
-export function subscribe<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
+export function subscribe<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(
   type: MESSAGE_TYPE,
-  method: (data: ShopwareMessageTypes[MESSAGE_TYPE]['responseType']) => void | Promise<unknown>
+  method: (data: SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']) => void | Promise<unknown>
 ): () => void {
   return handle(type, method);
 }
@@ -447,22 +447,22 @@ export function subscribe<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
  */
 
 // SENDER WITH OPTIONAL ARGUMENTS (WHEN ALL BASE ARGUMENTS ARE DEFINED)
-export function createSender<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
+export function createSender<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>
 (messageType: MESSAGE_TYPE, baseMessageOptions: MessageDataType<MESSAGE_TYPE>)
-:(messageOptions?: MessageDataType<MESSAGE_TYPE>) => Promise<ShopwareMessageTypes[MESSAGE_TYPE]['responseType']>
+:(messageOptions?: MessageDataType<MESSAGE_TYPE>) => Promise<SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']>
 
 // SENDER WITH PARTIAL ARGUMENTS (ARGUMENTS DEFINED IN BASE OPTIONS ARE OMITTED)
-export function createSender<MESSAGE_TYPE extends keyof ShopwareMessageTypes, BASE_OPTIONS extends Partial<MessageDataType<MESSAGE_TYPE>>>
+export function createSender<MESSAGE_TYPE extends keyof SnapAdminMessageTypes, BASE_OPTIONS extends Partial<MessageDataType<MESSAGE_TYPE>>>
 (messageType: MESSAGE_TYPE, baseMessageOptions: BASE_OPTIONS)
-:(messageOptions: Omit<MessageDataType<MESSAGE_TYPE>, keyof BASE_OPTIONS>) => Promise<ShopwareMessageTypes[MESSAGE_TYPE]['responseType']>
+:(messageOptions: Omit<MessageDataType<MESSAGE_TYPE>, keyof BASE_OPTIONS>) => Promise<SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']>
 
 // SENDER WITH FULL ARGUMENTS (WHEN NO BASE ARGUMENTS ARE DEFINED)
-export function createSender<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
+export function createSender<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>
 (messageType: MESSAGE_TYPE)
-:(messageOptions: MessageDataType<MESSAGE_TYPE>) => Promise<ShopwareMessageTypes[MESSAGE_TYPE]['responseType']>
+:(messageOptions: MessageDataType<MESSAGE_TYPE>) => Promise<SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']>
 
 // MAIN FUNCTION WHICH INCLUDES ALL POSSIBILITES
-export function createSender<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
+export function createSender<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>
 (messageType: MESSAGE_TYPE, baseMessageOptions?: MessageDataType<MESSAGE_TYPE>)
 {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -475,11 +475,11 @@ export function createSender<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
  * Factory method which creates a handler so that the type don't need to be
  * defined and can be hidden.
  */
-export function createHandler<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(messageType: MESSAGE_TYPE) {
+export function createHandler<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(messageType: MESSAGE_TYPE) {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   return (method: (data: MessageDataType<MESSAGE_TYPE>, additionalInformation: {
     _event_: MessageEvent<string>,
-  }) => Promise<ShopwareMessageTypes[MESSAGE_TYPE]['responseType']> | ShopwareMessageTypes[MESSAGE_TYPE]['responseType']) => {
+  }) => Promise<SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']> | SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']) => {
     return handle(messageType, method);
   };
 }
@@ -488,14 +488,14 @@ export function createHandler<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(m
  * Factory method which creates a handler so that the type don't need to be
  * defined and can be hidden.
  */
-export function createSubscriber<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(messageType: MESSAGE_TYPE) {
+export function createSubscriber<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(messageType: MESSAGE_TYPE) {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  return (method: (data: ShopwareMessageTypes[MESSAGE_TYPE]['responseType']) => void | Promise<unknown>, id?: string) => {
+  return (method: (data: SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']) => void | Promise<unknown>, id?: string) => {
     if (!id) {
       return subscribe(messageType, method);
     }
 
-    const wrapper = (data: ShopwareMessageTypes[MESSAGE_TYPE]['responseType']): void => {
+    const wrapper = (data: SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']): void => {
       if (data.id === id) {
         void method(data);
       }
@@ -637,17 +637,17 @@ window._swsdk = {
 /**
  * Check if the data is valid message data
  */
-function isMessageData<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(eventData: unknown): eventData is ShopwareMessageSendData<MESSAGE_TYPE> {
-  const snapMessageData = eventData as ShopwareMessageSendData<MESSAGE_TYPE>;
+function isMessageData<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(eventData: unknown): eventData is SnapAdminMessageSendData<MESSAGE_TYPE> {
+  const snapMessageData = eventData as SnapAdminMessageSendData<MESSAGE_TYPE>;
 
   return !!snapMessageData._type
          && !!snapMessageData._data
          && !!snapMessageData._callbackId;
 }
 
-// ShopwareMessageTypes[MESSAGE_TYPE]['responseType']
-function isMessageResponseData<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(eventData: unknown): eventData is ShopwareMessageResponseData<MESSAGE_TYPE> {
-  const snapMessageData = eventData as ShopwareMessageResponseData<MESSAGE_TYPE>;
+// SnapAdminMessageTypes[MESSAGE_TYPE]['responseType']
+function isMessageResponseData<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(eventData: unknown): eventData is SnapAdminMessageResponseData<MESSAGE_TYPE> {
+  const snapMessageData = eventData as SnapAdminMessageResponseData<MESSAGE_TYPE>;
 
   return !!snapMessageData._type
          && !!snapMessageData.hasOwnProperty('_response')

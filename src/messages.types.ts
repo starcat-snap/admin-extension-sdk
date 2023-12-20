@@ -1,6 +1,6 @@
 import type { notificationDispatch } from './notification/index';
 import type { windowRedirect, windowReload, windowRouterPush } from './window/index';
-import type { contextLanguage, contextEnvironment, contextLocale, contextCurrency, contextShopwareVersion, contextAppInformation, contextModuleInformation, contextUserInformation } from './context/index';
+import type { contextLanguage, contextEnvironment, contextLocale, contextCurrency, contextSnapAdminVersion, contextAppInformation, contextModuleInformation, contextUserInformation } from './context/index';
 import type { uiComponentSectionRenderer } from './ui/componentSection/index';
 import type { uiTabsAddTabItem } from './ui/tabs';
 import type { locationUpdateHeight, locationUpdateUrl } from './location/index';
@@ -30,7 +30,7 @@ import type {
  * Contains all snap send types.
  * @internal
  */
-export interface ShopwareMessageTypes {
+export interface SnapAdminMessageTypes {
   notificationDispatch: notificationDispatch,
   windowRedirect: windowRedirect,
   windowRouterPush: windowRouterPush,
@@ -39,7 +39,7 @@ export interface ShopwareMessageTypes {
   contextEnvironment: contextEnvironment,
   contextLocale: contextLocale,
   contextCurrency: contextCurrency,
-  contextShopwareVersion: contextShopwareVersion,
+  contextSnapAdminVersion: contextSnapAdminVersion,
   contextUserInformation: contextUserInformation,
   contextAppInformation: contextAppInformation,
   contextModuleInformation: contextModuleInformation,

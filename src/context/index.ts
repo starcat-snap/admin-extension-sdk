@@ -6,7 +6,7 @@ export const getEnvironment = createSender('contextEnvironment', {});
 export const getLocale = createSender('contextLocale', {});
 export const subscribeLocale = createSubscriber('contextLocale');
 export const getCurrency = createSender('contextCurrency', {});
-export const getShopwareVersion = createSender('contextShopwareVersion', {});
+export const getSnapAdminVersion = createSender('contextSnapAdminVersion', {});
 export const getUserInformation = createSender('contextUserInformation', {});
 export const getAppInformation = createSender('contextAppInformation', {});
 export const getModuleInformation = createSender('contextModuleInformation', {});
@@ -49,9 +49,9 @@ export type contextCurrency = {
 }
 
 /**
- * Get the current Shopware version
+ * Get the current SnapAdmin version
  */
-export type contextShopwareVersion = {
+export type contextSnapAdminVersion = {
   responseType: string,
 }
 

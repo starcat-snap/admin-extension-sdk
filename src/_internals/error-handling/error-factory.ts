@@ -1,10 +1,10 @@
 import HandleError from './HandleError';
 import {hasOwnProperty} from '../utils';
 import MissingPrivilegesError from '../../privileges/missing-privileges-error';
-import type {ShopwareMessageTypes} from '../../messages.types';
+import type {SnapAdminMessageTypes} from '../../messages.types';
 import type { privilegeString } from '../../privileges/privilege-resolver';
 
-export default function createError(type: keyof ShopwareMessageTypes, e: unknown): Error {
+export default function createError(type: keyof SnapAdminMessageTypes, e: unknown): Error {
   if (typeof e === 'string') {
     return new HandleError(e);
   }

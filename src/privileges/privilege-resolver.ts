@@ -1,5 +1,5 @@
-import { ShopwareMessageTypePrivileges } from '.';
-import type { ShopwareMessageTypes } from '../messages.types';
+import { SnapAdminMessageTypePrivileges } from '.';
+import type { SnapAdminMessageTypes } from '../messages.types';
 import { adminExtensions } from '../channel';
 
 export type privilegeString = `${keyof privileges}:${string}`;
@@ -17,7 +17,7 @@ export type extension = {
   permissions: privileges,
 }
 
-export function sendPrivileged(messageType: keyof ShopwareMessageTypes): Array<privilegeString> | null {
+export function sendPrivileged(messageType: keyof SnapAdminMessageTypes): Array<privilegeString> | null {
   const requiredPrivileges = getRequiredPrivilegesForMessage(messageType);
   const locationPrivileges = getLocationPrivileges(window.location);
 
@@ -28,7 +28,7 @@ export function sendPrivileged(messageType: keyof ShopwareMessageTypes): Array<p
   return getMissingPrivileges(requiredPrivileges, locationPrivileges);
 }
 
-export function handlePrivileged(messageType: keyof ShopwareMessageTypes, origin: string): Array<privilegeString> | null {
+export function handlePrivileged(messageType: keyof SnapAdminMessageTypes, origin: string): Array<privilegeString> | null {
   const requiredPrivileges = getRequiredPrivilegesForMessage(messageType);
   const extension = findExtensionByBaseUrl(origin);
 
@@ -39,10 +39,10 @@ export function handlePrivileged(messageType: keyof ShopwareMessageTypes, origin
   return getMissingPrivileges(requiredPrivileges, extension.permissions);
 }
 
-function getRequiredPrivilegesForMessage<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(messageType: MESSAGE_TYPE): typeof ShopwareMessageTypePrivileges[MESSAGE_TYPE]
+function getRequiredPrivilegesForMessage<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(messageType: MESSAGE_TYPE): typeof SnapAdminMessageTypePrivileges[MESSAGE_TYPE]
 function getRequiredPrivilegesForMessage(messageType: string): privileges
-function getRequiredPrivilegesForMessage<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(messageType: MESSAGE_TYPE | string): typeof ShopwareMessageTypePrivileges[MESSAGE_TYPE] | privileges {
-  return ShopwareMessageTypePrivileges[messageType] ?? {};
+function getRequiredPrivilegesForMessage<MESSAGE_TYPE extends keyof SnapAdminMessageTypes>(messageType: MESSAGE_TYPE | string): typeof SnapAdminMessageTypePrivileges[MESSAGE_TYPE] | privileges {
+  return SnapAdminMessageTypePrivileges[messageType] ?? {};
 }
 
 function getLocationPrivileges(location: Location): privileges {

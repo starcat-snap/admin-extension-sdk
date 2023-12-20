@@ -1,5 +1,5 @@
 import { toPath, get } from 'lodash';
-import type { ShopwareMessageTypes } from '../../messages.types';
+import type { SnapAdminMessageTypes } from '../../messages.types';
 import MissingPrivilegesError from '../../privileges/missing-privileges-error';
 import type { privilegeString } from '../../privileges/privilege-resolver';
 import { findExtensionByBaseUrl } from '../../privileges/privilege-resolver';
@@ -7,7 +7,7 @@ import { findExtensionByBaseUrl } from '../../privileges/privilege-resolver';
 export function selectData(
   sourceData: unknown,
   selectors?: string[],
-  messageType: keyof ShopwareMessageTypes = 'datasetSubscribe',
+  messageType: keyof SnapAdminMessageTypes = 'datasetSubscribe',
   origin?: string,
 ): unknown {
   const extension = findExtensionByBaseUrl(origin ?? '');
