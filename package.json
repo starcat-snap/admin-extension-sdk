@@ -1,7 +1,7 @@
 {
   "name": "@snap-admin/admin-extension-sdk",
   "license": "MIT",
-  "version": "3.0.16",
+  "version": "3.0.17",
   "repository": "git://github.com/starcat-snap/admin-extension-sdk.git",
   "description": "The SDK for App iframes to communicate with the Snap Administration",
   "keywords": [
