@@ -3,7 +3,6 @@ import type { windowRedirect, windowReload, windowRouterPush } from './window/in
 import type { contextLanguage, contextEnvironment, contextLocale, contextCurrency, contextShopwareVersion, contextAppInformation, contextModuleInformation, contextUserInformation } from './context/index';
 import type { uiComponentSectionRenderer } from './ui/componentSection/index';
 import type { uiTabsAddTabItem } from './ui/tabs';
-import type { cmsRegisterElement } from './ui/cms';
 import type { locationUpdateHeight, locationUpdateUrl } from './location/index';
 import type { menuItemAdd } from './ui/menu';
 import type { settingsItemAdd } from './ui/settings';
@@ -28,7 +27,7 @@ import type {
 } from './data/repository';
 
 /**
- * Contains all shopware send types.
+ * Contains all snap send types.
  * @internal
  */
 export interface ShopwareMessageTypes {
@@ -47,7 +46,6 @@ export interface ShopwareMessageTypes {
   getPageTitle: getPageTitle,
   uiComponentSectionRenderer: uiComponentSectionRenderer,
   uiTabsAddTabItem: uiTabsAddTabItem,
-  cmsRegisterElement: cmsRegisterElement,
   locationUpdateHeight: locationUpdateHeight,
   locationUpdateUrl: locationUpdateUrl,
   menuItemAdd: menuItemAdd,

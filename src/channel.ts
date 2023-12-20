@@ -186,27 +186,27 @@ export function send<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(
         return;
       }
 
-      let shopwareResponseData;
+      let snapResponseData;
       // Try to parse the json file
       try {
-        shopwareResponseData = JSON.parse(event.data) as unknown;
+        snapResponseData = JSON.parse(event.data) as unknown;
       } catch {
         // Fail silently when message is not a valid json file
         return;
       }
 
       // Check if messageData is valid
-      if (!isMessageResponseData<MESSAGE_TYPE>(shopwareResponseData)) {
+      if (!isMessageResponseData<MESSAGE_TYPE>(snapResponseData)) {
         return;
       }
 
       // Only execute if response value exists
-      if (!shopwareResponseData.hasOwnProperty('_response')) {
+      if (!snapResponseData.hasOwnProperty('_response')) {
         return;
       }
 
       // Deserialize methods etc. so that they are callable in JS
-      const deserializedResponseData = deserialize(shopwareResponseData, event) as ShopwareMessageResponseData<MESSAGE_TYPE>;
+      const deserializedResponseData = deserialize(snapResponseData, event) as ShopwareMessageResponseData<MESSAGE_TYPE>;
 
       // Remove event so that in only execute once
       window.removeEventListener('message', callbackHandler);
@@ -295,23 +295,23 @@ export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
       return;
     }
 
-    let shopwareMessageData;
+    let snapMessageData;
 
     // Try to parse the json file
     try {
-      shopwareMessageData = JSON.parse(event.data) as unknown;
+      snapMessageData = JSON.parse(event.data) as unknown;
     } catch {
       // Fail silently when message is not a valid json file
       return;
     }
 
     // Check if messageData is valid
-    if (!isMessageData<MESSAGE_TYPE>(shopwareMessageData)) {
+    if (!isMessageData<MESSAGE_TYPE>(snapMessageData)) {
       return;
     }
 
     // Deserialize methods etc. so that they are callable in JS
-    const deserializedMessageData = deserialize(shopwareMessageData, event) as ShopwareMessageSendData<MESSAGE_TYPE>;
+    const deserializedMessageData = deserialize(snapMessageData, event) as ShopwareMessageSendData<MESSAGE_TYPE>;
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const responseValue = await Promise.resolve((() => {
@@ -336,7 +336,7 @@ export function handle<MESSAGE_TYPE extends keyof ShopwareMessageTypes>
        * in Entity and Entity Collection
        */
       const validationErrors = validate({
-        serializedData: shopwareMessageData,
+        serializedData: snapMessageData,
         origin: event.origin,
         type: type,
         privilegesToCheck: ['create', 'delete', 'update', 'read'],
@@ -638,18 +638,18 @@ window._swsdk = {
  * Check if the data is valid message data
  */
 function isMessageData<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(eventData: unknown): eventData is ShopwareMessageSendData<MESSAGE_TYPE> {
-  const shopwareMessageData = eventData as ShopwareMessageSendData<MESSAGE_TYPE>;
+  const snapMessageData = eventData as ShopwareMessageSendData<MESSAGE_TYPE>;
 
-  return !!shopwareMessageData._type
-         && !!shopwareMessageData._data
-         && !!shopwareMessageData._callbackId;
+  return !!snapMessageData._type
+         && !!snapMessageData._data
+         && !!snapMessageData._callbackId;
 }
 
 // ShopwareMessageTypes[MESSAGE_TYPE]['responseType']
 function isMessageResponseData<MESSAGE_TYPE extends keyof ShopwareMessageTypes>(eventData: unknown): eventData is ShopwareMessageResponseData<MESSAGE_TYPE> {
-  const shopwareMessageData = eventData as ShopwareMessageResponseData<MESSAGE_TYPE>;
+  const snapMessageData = eventData as ShopwareMessageResponseData<MESSAGE_TYPE>;
 
-  return !!shopwareMessageData._type
-         && !!shopwareMessageData.hasOwnProperty('_response')
-         && !!shopwareMessageData._callbackId;
+  return !!snapMessageData._type
+         && !!snapMessageData.hasOwnProperty('_response')
+         && !!snapMessageData._callbackId;
 }
