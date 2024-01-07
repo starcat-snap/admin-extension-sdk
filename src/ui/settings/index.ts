@@ -25,7 +25,7 @@ export type settingsItemAdd = {
      * Determines in which tab your settings item will be displayed.
      * Defaults to plugins.
      */
-    tab?: 'shop' | 'system' | 'plugins',
+    tab?: string,
 
     /**
      * Toggles the sw-page search bar on/off.
